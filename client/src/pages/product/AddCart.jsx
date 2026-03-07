@@ -38,7 +38,9 @@ export const AddCart = ({ productID, setQuantity, size, quantity }) => {
         }
       }
     } catch (error) {
-      // console.log(error);
+      console.error("Error adding to cart:", error);
+      message.current = "Network error. Please try again.";
+      setShowModal(true);
     }
   };
 

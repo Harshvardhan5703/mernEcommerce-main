@@ -3,6 +3,17 @@ import Cart from "../models/cartModel.js";
 const addItem = async (req, res) => {
   const { userID, productID, quantity, size } = req.body;
 
+  // Validate input
+  if (!userID || !productID || quantity === undefined || !size) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    return res.status(400).json({ error: "Quantity must be a positive integer" });
+  }
+  if (typeof size !== "string" || size.trim() === "") {
+    return res.status(400).json({ error: "Invalid size" });
+  }
+
   try {
     const cart = await Cart.findOne({ userID: userID });
 
@@ -23,7 +34,9 @@ const addItem = async (req, res) => {
     const cartItems = cart.items;
 
     const itemExists = await Cart.findOne({
-      $and: [{ "items.productID": productID }, { "items.size": size }],
+      userID: userID,
+      "items.productID": productID,
+      "items.size": size,
     });
     if (itemExists) {
       return res.status(409).json({ message: "item already added" });
@@ -64,6 +77,11 @@ const deleteItem = async (req, res) => {
   const { itemID } = req.body;
   const { userID } = req.params;
 
+  // Validate input
+  if (!itemID || !userID) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
   try {
     const deleteCartItem = await Cart.updateOne(
       { userID: userID },
@@ -72,11 +90,11 @@ const deleteItem = async (req, res) => {
 
     if (deleteCartItem.modifiedCount !== 1) {
       return res
-        .status(500)
-        .json({ error: "Some error occured while Deleting the item" });
+        .status(404)
+        .json({ error: "Item not found in cart" });
     }
 
-    res.status(200).json({ message: "Item Deleted Successfully" });
+    return res.status(200).json({ message: "Item Deleted Successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -87,6 +105,14 @@ const updateItem = async (req, res) => {
   const { userID } = req.params;
   const { itemID, quantity } = req.body;
 
+  // Validate input
+  if (!itemID || quantity === undefined) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    return res.status(400).json({ error: "Quantity must be a positive integer" });
+  }
+
   try {
     const updatedCart = await Cart.updateOne(
       { userID: userID, "items._id": itemID },
@@ -94,12 +120,12 @@ const updateItem = async (req, res) => {
     );
 
     if (updatedCart.modifiedCount !== 1) {
-      res
-        .status(500)
-        .json({ message: "Error occured while updating the item" });
+      return res
+        .status(404)
+        .json({ error: "Item not found in cart" });
     }
 
-    res.status(200).json({ message: "successfully updated Item" });
+    return res.status(200).json({ message: "successfully updated Item" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal Server Error" });
