@@ -6,7 +6,7 @@ export const PriceSection = ({price, ratings}) => {
   return (
     <div className="price_section flex flex-col border-b border-gray-300 pb-3 mx-2 mt-2 xl:mt-4 lg:flex-row">
       <span className="font-semibold text-PrimaryBlue mt-3 px-3 text-4xl">
-        ${price}
+        ${price}0
       </span>
       <div className="left_price flex flex-col mt-2 xl:mt-1 lg:ml-4">
         <div className="rating_review flex ml-2 mt-2 gap-2">

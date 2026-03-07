@@ -198,7 +198,7 @@ const Cart = () => {
                       <span className="ml-2">x {item.quantity}</span>
                     </div>
                     <span className="price mr-4 text-lg font-semibold text-PrimaryBlue font-Poppins">
-                      ${item.price}
+                      ₹{item.price}0
                     </span>
                   </li>
                 );
@@ -209,7 +209,7 @@ const Cart = () => {
           <div className="total flex justify-between my-2">
             <span className="font-bold text-xl ml-3 xl:text-2xl">Total</span>
             <span className="total_price mr-4 text-xl font-semibold font-Poppins xl:teext-2xl">
-              ${total ? total : 0}
+              ₹{total ? total : 0}0
             </span>
           </div>
           <button

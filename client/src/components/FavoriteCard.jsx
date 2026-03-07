@@ -31,7 +31,7 @@ const FavoriteCard = ({item}) => {
               </h1>
               <h1 className="text-slate text-sm font-Poppins">{subtitle}</h1>
               <span className="price text-PrimaryBlue font-bold text-2xl font-Poppins my-1">
-                ${price}
+                ₹ {price}0
               </span>
             </div>
           </div>

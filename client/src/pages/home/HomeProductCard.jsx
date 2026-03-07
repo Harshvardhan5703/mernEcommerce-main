@@ -57,7 +57,7 @@ function HomeProductCard({ item }) {
             {item.title}
           </p>
           <p className="product-card-price text-xl md:text-2xl my-2 font-medium">
-            ${item.price}
+            ₹{item.price}0
           </p>
         </div>
         <button className="product-addtocart-btn h-full flex text-2xl"

@@ -13,7 +13,7 @@ export const ReviewCard = ({ reviewCount }) => {
       review:
         "Exceptional quality and style, the brand never disappoints with its attention to detail and timeless designs.",
       rating: 5,
-      name: "Adams lenin",
+      name: "Aman Kumar",
       occupation: "Graphic Designer",
       image: reviewImage1,
     },
@@ -22,7 +22,7 @@ export const ReviewCard = ({ reviewCount }) => {
       review:
         "Unbeatable comfort in soft cotton shirts and tailored jeans – a must for modern men",
       rating: 4,
-      name: "Michael Johnson",
+      name: "Deepak Singh",
       occupation: "Software Engineer",
       image: reviewImage2,
     },
@@ -31,7 +31,7 @@ export const ReviewCard = ({ reviewCount }) => {
       review:
         "Effortless elegance and comfort combined seamlessly in this brand's stylish clothing",
       rating: 5,
-      name: "Roberto del rio",
+      name: "Harish Verma",
       occupation: "Musician",
       image: reviewImage3,
     },
@@ -40,7 +40,7 @@ export const ReviewCard = ({ reviewCount }) => {
       review:
         "Customer-centric excellence shines with responsive support and consistent sizing, making online shopping a breeze.",
       rating: 3,
-      name: "Alex Carter",
+      name: "Divyanshu Sharma",
       occupation: "Accountant",
       image: reviewImage4,
     },

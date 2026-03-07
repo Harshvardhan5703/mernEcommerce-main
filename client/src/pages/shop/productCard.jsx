@@ -28,7 +28,7 @@ export const ProductCard = ({ item }) => {
             {subtitle}
           </span>
           <span className="font-Volkhov text-xs text-slate sm:text-sm">
-            $ {price}
+            ₹ {price}0
           </span>
         </figcaption>
       </figure>

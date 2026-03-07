@@ -68,7 +68,7 @@ const CartProduct = ({ item, setCart, cart, setConfirmModal, deleteID }) => {
                 {title}
               </h1>
               <span className="price text-PrimaryBlue font-bold text-2xl font-Poppins my-1">
-                ${price}
+                ₹{price}0
               </span>
               <div className="size_selection mt-2 bg-white w-fit py-2 px-3 rounded-lg text-center text-PrimaryBlue font-semibold outline-none">
                 {size}
