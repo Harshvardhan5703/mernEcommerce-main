@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useUserContext } from "../../contexts/userContext";
 import { ErrorMessage, SuccessMessage } from "../../components/Alert";
 import { useNavigate, Link } from "react-router-dom";
@@ -8,8 +8,7 @@ import { FavoriteCard } from "../../components/FavoriteCard";
 import { useCheckoutContext } from "../../contexts/checkoutContext";
 
 const Profile = () => {
-  const { user, setUser, setLoggedIn, token } = useUserContext();
-  const { userWishlist, setUserWishlist } = useUserContext();
+  const { user, setUser, setLoggedIn, token, userWishlist } = useUserContext();
   const { address, setAddress } = useCheckoutContext();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState();
@@ -26,172 +25,155 @@ const Profile = () => {
         navigate("/login");
         setUser(undefined);
       }, 2000);
-
       return;
     }
-    setSuccess("");
-    setError("unable to log out some error occured");
+    setError("Unable to log out. Please try again.");
   };
 
   const shippingDetails = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
-    // console.log(address)
   };
+
+  if (!token) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+        <h2 className="text-2xl font-Poppins text-gray-600">Please sign in to view your profile</h2>
+        <Link to="/login" className="bg-PrimaryBlue text-white px-8 py-3 rounded-full hover:bg-opacity-90 transition-all">
+          Login First
+        </Link>
+      </div>
+    );
+  }
+
+  if (!user) return <Loading />;
+
   return (
-    <>
-      {" "}
-      {token ? (
-        user ? (
-          <div className="flex w-full mt-10 h-[80vh]">
-            <div className="flex flex-col items-center mt-6 w-2/5 px-6">
-              <div>
-                <h1 className="text-2xl text-center mb-6 font-Volkhov font-semibold">
-                  Your Profile
-                </h1>
+    <div className="max-w-7xl mx-auto px-4 py-10 font-Poppins">
+      {/* Notifications */}
+      <div className="fixed top-5 right-5 z-50">
+        {error && <ErrorMessage error={error} />}
+        {success && <SuccessMessage success={success} />}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* LEFT COLUMN: PROFILE CARD */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <div className="flex flex-col items-center mb-8">
+              <div className="w-24 h-24 bg-lightestBlue rounded-full flex items-center justify-center text-PrimaryBlue text-3xl font-bold mb-4">
+                {user?.fullname?.charAt(0) || "U"}
               </div>
-              <div className="flex flex-col gap-3">
-                <div className="name flex flex-col gap-1">
-                  <label htmlFor="name">Full name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    disabled={!isEditing}
-                    value={user?.fullname}
-                    className="bg-lightestBlue px-2 py-2 rounded-md border border-white outline-none"
-                    onChange={(e) => shippingDetails(e)}
-                  />
-                </div>
-                <div className="name flex flex-col gap-1">
-                  <label htmlFor="name">Your Address</label>
-                  <input
-                    type="text"
-                    name="name"
-                    disabled={!isEditing}
-                    value={address?.name}
-                    className="bg-lightestBlue px-2 py-2 rounded-md border border-white outline-none"
-                    onChange={(e) => shippingDetails(e)}
-                  />
-                </div>
-                <div className="streetname flex flex-col gap-1">
-                  <label htmlFor="streetname">Street Name</label>
-                  <input
-                    type="text"
-                    name="street"
-                    disabled={!isEditing}
-                    value={address?.street}
-                    className="bg-lightestBlue px-2 py-2 rounded-md border border-white outline-none"
-                    onChange={(e) => shippingDetails(e)}
-                  />
-                </div>
-                <div className="countryname flex flex-col gap-1">
-                  <label htmlFor="countryname">Country</label>
-                  <input
-                    type="text"
-                    name="country"
-                    disabled={!isEditing}
-                    value={address?.country}
-                    className="bg-lightestBlue px-2 py-2 rounded-md border border-white outline-none"
-                    onChange={(e) => shippingDetails(e)}
-                  />
-                </div>
-                <div className="stateCity flex w-full items-center gap-3">
-                  <div className="state flex flex-col gap-1">
-                    <label htmlFor="state">State</label>
+              <h1 className="text-2xl font-Volkhov font-bold text-gray-800">{user?.fullname}</h1>
+              <p className="text-gray-500 text-sm">{user?.email}</p>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-2">Shipping Details</h3>
+              
+              <div className="space-y-3">
+                {[
+                  { label: "Full Name", name: "fullname", value: user?.fullname, type: "text" },
+                  { label: "Street", name: "street", value: address?.street, type: "text" },
+                  { label: "Country", name: "country", value: address?.country, type: "text" },
+                ].map((field) => (
+                  <div key={field.name} className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-600 ml-1">{field.label}</label>
+                    <input
+                      type={field.type}
+                      name={field.name}
+                      disabled={!isEditing}
+                      value={field.value || ""}
+                      onChange={shippingDetails}
+                      className={`px-3 py-2 rounded-lg border transition-all outline-none text-sm ${
+                        isEditing ? "border-PrimaryBlue bg-white" : "border-transparent bg-gray-50 text-gray-500"
+                      }`}
+                    />
+                  </div>
+                ))}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-600 ml-1">State</label>
                     <input
                       type="text"
                       name="state"
                       disabled={!isEditing}
-                      value={address?.state}
-                      className="bg-lightestBlue w-full px-2 py-2 rounded-md border border-white outline-none"
-                      onChange={(e) => shippingDetails(e)}
+                      value={address?.state || ""}
+                      onChange={shippingDetails}
+                      className={`px-3 py-2 rounded-lg border transition-all outline-none text-sm ${
+                        isEditing ? "border-PrimaryBlue bg-white" : "border-transparent bg-gray-50 text-gray-500"
+                      }`}
                     />
                   </div>
-                  <div className="city flex flex-col gap-1">
-                    <label htmlFor="name">City</label>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-600 ml-1">City</label>
                     <input
                       type="text"
                       name="city"
                       disabled={!isEditing}
-                      value={address?.city}
-                      className="bg-lightestBlue w-full px-2 py-2 rounded-md border border-white outline-none"
-                      onChange={(e) => shippingDetails(e)}
+                      value={address?.city || ""}
+                      onChange={shippingDetails}
+                      className={`px-3 py-2 rounded-lg border transition-all outline-none text-sm ${
+                        isEditing ? "border-PrimaryBlue bg-white" : "border-transparent bg-gray-50 text-gray-500"
+                      }`}
                     />
                   </div>
                 </div>
-                <div className="pincode flex flex-col gap-1">
-                  <label htmlFor="pincode">Pin Code</label>
-                  <input
-                    type="number"
-                    name="pincode"
-                    disabled={!isEditing}
-                    value={address?.pincode}
-                    className="bg-lightestBlue px-2 py-2 rounded-md border border-white outline-none"
-                    onChange={(e) => shippingDetails(e)}
-                  />
-                </div>
               </div>
-              <button
-                onClick={() => {
-                  console.log("edit");
-                  setIsEditing(!isEditing);
-                }}
-                className="bg-PrimaryBlue rounded-lg font-semibold font-Poppins text-white mt-6 px-4 py-2  text-center"
-              >
-                {isEditing ? "Save" : "Edit"}
-              </button>
-              <button
-                onClick={() => {
-                  handleSubmit();
-                }}
-                className="bg-PrimaryBlue rounded-lg font-semibold font-Poppins text-white mt-2 px-4 py-2  text-center"
-              >
-                Logout
-              </button>
-            </div>
-            {/* <section className="profile my-5 flex flex-col min-h-[40vh] gap-4 xl:w-1/2 xl:mr-16 xl:ml-3">
-              <h1 className="text-center font-serif text-2xl">
-                {user.fullname}
-              </h1>
-              <h2 className="text-center font-Poppins text-2xl">
-                {user.email}
-              </h2>
-              <button
-                onClick={handleSubmit}
-                className="bg-black text-white h-10 w-24 text-center"
-              >
-                Logout
-              </button>
-              {error && <ErrorMessage error={error} />}
-              {success && <SuccessMessage success={success} />}
-            </section> */}
-            <div className="flex flex-col h-full w-3/5">
-              <div>
-                <h1 className="text-2xl text-center font-Volkhov font-semibold">
-                  Your Wishlist
-                </h1>
+
+              <div className="flex flex-col gap-3 pt-6">
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  className={`w-full py-2.5 rounded-xl font-semibold transition-all ${
+                    isEditing 
+                    ? "bg-green text-white hover:bg-green-700" 
+                    : "bg-PrimaryBlue text-white hover:shadow-lg"
+                  }`}
+                >
+                  {isEditing ? "Save Changes" : "Edit Profile"}
+                </button>
+
+                <button
+                  onClick={handleSubmit}
+                  className="w-full py-2.5 rounded-xl font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                >
+                  Logout
+                </button>
               </div>
-              {userWishlist?.length > 0 ? (
-                <div className="flex flex-col h-full flex-wrap  overflow-scroll overflow-y-hidden md:mx-14 md:px-10 lg:mx-5 lg:py-20 lg:px-5 xl:mr-10 xl:px-8 xl:gap-4 xl:py-12">
-                  {userWishlist?.map((item, index) => (
-                    <FavoriteCard item={item} />
-                  ))}
-                </div>
-              ) : (
-                <div className="mt-40 text-center">
-                  <h1 className="text-2xl">No items in wishlist</h1>
-                </div>
-              )}
             </div>
           </div>
-        ) : (
-          <Loading />
-        )
-      ) : (
-        <div className="w-screen text-center">
-          <Link to={"/login"}>Login First</Link>
         </div>
-      )}
-    </>
+
+        {/* RIGHT COLUMN: WISHLIST */}
+        <div className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-Volkhov font-bold text-gray-800">Your Wishlist</h2>
+            <span className="bg-lightestBlue text-PrimaryBlue px-3 py-1 rounded-full text-xs font-bold">
+              {userWishlist?.length || 0} Items
+            </span>
+          </div>
+
+          {userWishlist?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto max-h-[75vh] pr-2 custom-scrollbar">
+              {userWishlist.map((item) => (
+                <FavoriteCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 h-[50vh] flex flex-col items-center justify-center text-center p-10">
+              <div className="text-4xl mb-4">❤️</div>
+              <h3 className="text-xl font-semibold text-gray-700">Your wishlist is empty</h3>
+              <p className="text-gray-500 mt-2 mb-6">Start adding items you love to find them later!</p>
+              <Link to="/shop" className="text-PrimaryBlue font-bold hover:underline">
+                Explore Shop
+              </Link>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
   );
 };
 

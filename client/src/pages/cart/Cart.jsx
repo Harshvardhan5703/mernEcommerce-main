@@ -198,7 +198,7 @@ const Cart = () => {
                       <span className="ml-2">x {item.quantity}</span>
                     </div>
                     <span className="price mr-4 text-lg font-semibold text-PrimaryBlue font-Poppins">
-                      ₹{item.price}0
+                      ₹{item.price*item.quantity}0
                     </span>
                   </li>
                 );
