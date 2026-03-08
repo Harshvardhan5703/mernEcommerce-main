@@ -2,14 +2,12 @@
 
 Ecommerce App Built with the Mern Stack.
 
-## Things to Learn While Building
+## Things USED
 
-* [ ] MicroServices Architecture (not using bcoz of complexity) ❌
-* [ ] Azure - Deploying backend.
 * [ ] mongoDB Atlas - deploy database
 * [ ] vercel - Deploy frontend.
-* [ ] OAuth for github and google Auth.
-* [ ] Integrating External Api's like Strip and razorpay for payments, twilio for notifications.
+* [ ] OAuth for and google Auth.
+* [ ] Integrating External Api's like Stripe for payment.
 * [ ] Testing (postman, jest, supertest, mongodb-memory-server) -> unit test + integration tests.
 
 ## Local Development
