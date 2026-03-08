@@ -5,7 +5,7 @@ import { CartContextProvider } from "./contexts/cartContext";
 
 import "./Styles.css";
 import { CheckoutProvider } from "./contexts/checkoutContext";
-
+import Chatbot from "./components/chatbot";
 function App() {
   return (
     <ProductContextProvider>
@@ -13,6 +13,7 @@ function App() {
         <CartContextProvider>
           <CheckoutProvider>
             <Routes />
+            <Chatbot />
           </CheckoutProvider>
         </CartContextProvider>
       </UserContextProvider>
@@ -22,16 +23,16 @@ function App() {
 
 export default App;
 
-/* 
+/*
     DONE 🍥
-    ✅ 
-    
+    ✅
+
     Tasks ⛳
     🌟 set up Routing.
     🌟 create header and footer and mobile navigation components.
     🌟 create homepage.
     🌟 create shopping page.
     🌟 create product page.
- 
+
 
 */
