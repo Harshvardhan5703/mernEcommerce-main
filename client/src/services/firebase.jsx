@@ -14,7 +14,7 @@ const app = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
 
-const auth = getAuth();
+const auth = getAuth(app);
 
 const authWithGoogle = async () => {
   try {
@@ -23,7 +23,7 @@ const authWithGoogle = async () => {
     return user
   } catch (error) {
     console.log(error);
-    return err
+    return error
   }
 };
 
