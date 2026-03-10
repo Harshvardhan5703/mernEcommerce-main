@@ -1,5 +1,7 @@
 import express from "express";
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
+import chatbotrouter  from "./src/routes/chatbotroute.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
@@ -45,10 +47,15 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);
+app.use("/chatbot", chatbotrouter);
 
 const runServer = async () => {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI, {
+  serverSelectionTimeoutMS: 15000,
+  tls: true
+});
+console.log("connected to mongodb");
     console.log("connected to mongodb");
     app.listen(PORT, () => {
       console.log(`Server started on ${PORT}`);
